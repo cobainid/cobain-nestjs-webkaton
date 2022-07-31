@@ -26,7 +26,7 @@ export class RolesController {
     return this.rolesService.create(createRoleDto);
   }
 
-  @ApiOperation({ summary: 'Get Specific Role', description: 'Get Specific Role' })
+  @ApiOperation({ summary: 'Get Specific Role', description: 'Get Role with specific ID' })
   @ApiParam({
     name: 'id',
     type: Number,
@@ -40,11 +40,12 @@ export class RolesController {
   }
 
 
+  @ApiOperation({ summary: 'Update Role', description: 'Update Role with specific ID' })
   @Patch(':id')
   @ApiParam({
     name: 'id',
     type: Number,
-    description: 'Id of role',
+    description: 'Id of Role',
     required: true,
     example: 1,
   })
@@ -53,11 +54,12 @@ export class RolesController {
     return this.rolesService.update(+id, updateRoleDto);
   }
 
+  @ApiOperation({ summary: 'Delete Role', description: 'Delete Role with specific ID' })
   @Delete(':id')
   @ApiParam({
     name: 'id',
     type: Number,
-    description: 'Id of role',
+    description: 'Id of Role',
     required: true,
     example: 1,
   })
