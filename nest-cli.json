@@ -1,0 +1,15 @@
+{
+    "$schema": "https://json.schemastore.org/nest-cli",
+    "collection": "@nestjs/schematics",
+    "sourceRoot": "src/modules/",
+    "root": "src/",
+    "title": "Nest CLI Schematics",
+    "description": "Nest CLI Schematics",
+    "version": "1.0.0",
+    "projects": {
+        "modular": {
+            "root": "src/",
+            "sourceRoot": "src/modules"
+        }
+    }
+}
