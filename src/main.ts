@@ -18,6 +18,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Catalogue API')
     .setDescription('The catalogue API')
+    .addBearerAuth()
     .setVersion('1.0')
     .build();
 
