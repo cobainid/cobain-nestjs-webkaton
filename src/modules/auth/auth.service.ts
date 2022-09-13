@@ -23,6 +23,10 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException('Email/Password not match any record in our database.');
     }
+    // throw error if user is not active
+    if (!user.is_active) {
+      throw new ConflictException('User is not active yet.');
+    }
     // check if password match
     const isValid = await argon2.verify(user.password_hash, LoginDto.password);
     // throw error if password not match
@@ -30,26 +34,24 @@ export class AuthService {
       throw new NotFoundException('Email/Password not match any record in our database.');
     }
     // generate token
-    var token = await this.signJWT(user);
+    const token = await this.signJWT(user);
     // return token
     return token;
   }
 
   async register(register: RegisterDto): Promise<any> {
     // init user
-    var user: User = new User();
+    const user: User = new User();
     user.email = register.email;
     // hash the password
     user.password_hash = await argon2.hash(register.password);
     try {
       // create user
-      var newUser: User = await this.userRepository.save(user);
-      // generate token
-      var token = await this.signJWT(newUser);
+      const newUser: User = await this.userRepository.save(user);
       // delete password_hash
       delete newUser.password_hash;
-      // return token
-      return Object.assign({}, newUser, token);
+      // return user
+      return newUser;
     } catch (error) {
       // throw error if email already exist
       if (error.code === 'ER_DUP_ENTRY') {
@@ -69,7 +71,7 @@ export class AuthService {
       // get secret from config
       const secret = this.config.get('JWT_SECRET');
       // generate jwt token
-      let token = await this.jwt.signAsync(payload, {
+      const token = await this.jwt.signAsync(payload, {
         expiresIn: '24h',
         secret,
       });

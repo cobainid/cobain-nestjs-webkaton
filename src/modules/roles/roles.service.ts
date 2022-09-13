@@ -1,4 +1,10 @@
-import { ConflictException, HttpException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
@@ -9,12 +15,11 @@ export class RolesService {
   constructor(
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
-  ) { }
+  ) {}
 
   findAll() {
     return this.roleRepository.find();
   }
-
 
   async create(createRoleDto: CreateRoleDto): Promise<Role> {
     try {
@@ -43,11 +48,10 @@ export class RolesService {
     return user;
   }
 
-
   async update(id: number, updateRoleDto: UpdateRoleDto): Promise<Role> {
     try {
       // update role
-      let response: UpdateResult = await this.roleRepository.update(+id, updateRoleDto);
+      const response: UpdateResult = await this.roleRepository.update(+id, updateRoleDto);
       if (response.affected === 0) {
         throw new NotFoundException(`Role with id ${id} not found`);
       }
@@ -62,17 +66,16 @@ export class RolesService {
         throw new HttpException(error.message, error.status || 500);
       }
     }
-
   }
 
   async remove(id: number) {
     // remove role
-    let response: DeleteResult = await this.roleRepository.delete(+id);
+    const response: DeleteResult = await this.roleRepository.delete(+id);
     // throw error if role not found
     if (response.affected === 0) {
       throw new NotFoundException(`Role with id ${id} not found`);
     }
     // return if exists
-    return "Role deleted successfully";
+    return 'Role deleted successfully';
   }
 }

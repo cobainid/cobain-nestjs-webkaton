@@ -14,7 +14,7 @@ async function bootstrap() {
     }),
   );
 
-  // configure swagger 
+  // configure swagger
   const config = new DocumentBuilder()
     .setTitle('Catalogue API')
     .setDescription('The catalogue API')
@@ -32,6 +32,24 @@ async function bootstrap() {
   });
   // configure port & start server
   await app.listen(env.APP_PORT || 3000);
+
+  // get application instance
+  const server = app.getHttpServer();
+  // get application url
+  const router = server._events.request._router;
+  const availableRoutes: [] = router.stack
+    .map((layer) => {
+      if (layer.route) {
+        return {
+          route: {
+            path: layer.route?.path,
+            method: layer.route?.stack[0].method,
+          },
+        };
+      }
+    })
+    .filter((item) => item !== undefined);
+  console.log(availableRoutes);
 }
 
 bootstrap();

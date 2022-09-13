@@ -2,14 +2,21 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Role } from './entities/role.entity';
 
 @ApiBearerAuth()
 @ApiTags('Roles')
 @Controller('roles')
 export class RolesController {
-  constructor(private readonly rolesService: RolesService) { }
+  constructor(private readonly rolesService: RolesService) {}
 
   @ApiOperation({ summary: 'Get all roles', description: 'Get all roles' })
   @ApiResponse({ status: 200, type: [Role] })
@@ -17,7 +24,6 @@ export class RolesController {
   findAll() {
     return this.rolesService.findAll();
   }
-
 
   @ApiOperation({ summary: 'Create role', description: 'Create role' })
   @ApiResponse({ status: 201, type: Role, description: 'Role created' })
@@ -38,7 +44,6 @@ export class RolesController {
   findOne(@Param('id') id: string) {
     return this.rolesService.findOne(+id);
   }
-
 
   @ApiOperation({ summary: 'Update Role', description: 'Update Role with specific ID' })
   @Patch(':id')

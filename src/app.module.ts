@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
-import { UsersModule } from './modules/users/users.module';
-import { RolesModule } from './modules/roles/roles.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule, RolesModule, AuthModule } from './modules';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './config/database.module';
-
-
+import { APP_GUARD } from '@nestjs/core';
+import { RoleGuard } from './guards';
 
 @Module({
   imports: [
@@ -13,7 +11,13 @@ import { DatabaseModule } from './config/database.module';
     DatabaseModule,
     RolesModule,
     UsersModule,
-    AuthModule,
+    AuthModule
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    },
   ],
 })
 export class AppModule {}
