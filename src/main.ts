@@ -16,14 +16,14 @@ async function bootstrap() {
 
   // configure swagger
   const config = new DocumentBuilder()
-    .setTitle('Catalogue API')
-    .setDescription('The catalogue API')
+    .setTitle('User Services')
+    .setDescription('All of our user services')
     .addBearerAuth()
     .setVersion('1.0')
     .build();
-
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('apidocs', app, document);
+
   // configure cors
   app.enableCors({
     origin: process.env.ALLOWED_ORIGINS?.split(/\s*,\s*/) ?? '*',

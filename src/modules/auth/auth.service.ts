@@ -1,4 +1,10 @@
-import { ConflictException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LoginDto, RegisterDto } from './dto';
@@ -56,6 +62,9 @@ export class AuthService {
       // throw error if email already exist
       if (error.code === 'ER_DUP_ENTRY') {
         throw new ConflictException('Email already exist.');
+      } else {
+        // unexpected error
+        throw new InternalServerErrorException('Failed to create user.');
       }
     }
   }

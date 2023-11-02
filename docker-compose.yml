@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  dev:
+    container_name: nestjs_api_dev
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start:debug
+    ports:
+      - 3000:3000
+      - 9229:9229
+    networks:
+      - nestjs-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - db
+  prod:
+    container_name: nestjs_api_prod
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: npm run start:prod
+    ports:
+      - 3000:3000
+      - 9229:9229
+    expose:
+      - 3000
+      - 9229
+    networks:
+      - nestjs-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - db
+  adminer:
+    container_name: nestjs_adminer
+    build: 
+      context: .
+      dockerfile: ./adminer.Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - nestjs-network
+  db:
+    image: mongo:latest
+    container_name: nestjs_db
+    ports:
+      - 27017:27017
+    networks:
+      - nestjs-network
+    volumes:
+      - ./mongodb:/data/db
+    restart: unless-stopped
+networks:
+  nestjs-network:
